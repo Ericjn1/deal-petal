@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DealPetal — The deals you actually care about</title>
+<meta name="description" content="Community-curated deals on beauty, fashion, wellness, home & kids. Discover, vote, and save together.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=Bricolage+Grotesque:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><ellipse cx='50' cy='35' rx='14' ry='24' fill='%23C4616A' opacity='.85'/><ellipse cx='50' cy='35' rx='14' ry='24' fill='%238B9E7E' opacity='.75' transform='rotate(72 50 50)'/><ellipse cx='50' cy='35' rx='14' ry='24' fill='%23D4A853' opacity='.75' transform='rotate(144 50 50)'/><ellipse cx='50' cy='35' rx='14' ry='24' fill='%23C4826A' opacity='.75' transform='rotate(216 50 50)'/><ellipse cx='50' cy='35' rx='14' ry='24' fill='%236B4C6E' opacity='.75' transform='rotate(288 50 50)'/><circle cx='50' cy='50' r='8' fill='%23FAF7F4'/><circle cx='50' cy='50' r='5' fill='%23D4A853' opacity='.9'/></svg>">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --rose:#C4616A;--rose-light:#F2D4D6;--rose-dark:#9E3A43;
+  --cream:#FAF7F4;--warm-white:#FFFBF8;
+  --sage:#8B9E7E;--sage-light:#D4DFD0;
+  --honey:#D4A853;--honey-light:#F5E6C4;
+  --terra:#C4826A;--terra-light:#F0DDD5;
+  --plum:#6B4C6E;--plum-light:#D8C8D9;
+  --charcoal:#2D2A26;--warm-gray:#8A8580;--light-gray:#E8E4E0;
+  --fd:'Playfair Display',Georgia,serif;
+  --fb:'DM Sans',sans-serif;
+  --fa:'Bricolage Grotesque',sans-serif;
+}
+body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:var(--rose-light);color:var(--charcoal)}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-thumb{background:var(--light-gray);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--warm-gray)}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--rose);outline-offset:2px}
+a{color:var(--rose);text-decoration:none}
+
+/* Animations */
+@keyframes fu{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes si{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+@keyframes pu{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+.fu{animation:fu .6s ease forwards;opacity:0}
+.si{animation:si .4s ease forwards;opacity:0}
+
+/* Nav */
+.nav{position:sticky;top:0;z-index:100;background:rgba(255,251,248,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--light-gray)}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer}
+.nav-logo span{font-family:var(--fd);font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--rose),var(--plum));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-link{background:none;border:none;cursor:pointer;font-size:14px;font-weight:400;color:var(--charcoal);font-family:var(--fb);border-bottom:2px solid transparent;padding-bottom:2px;transition:color .2s}
+.nav-link.active{font-weight:600;color:var(--rose);border-bottom-color:var(--rose)}
+.nav-link:hover{color:var(--rose)}
+.btn-rose{padding:9px 18px;background:var(--rose);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--fa);box-shadow:0 2px 8px rgba(196,97,106,.2);transition:background .2s}
+.btn-rose:hover{background:var(--rose-dark)}
+.btn-charcoal{padding:12px 20px;background:var(--charcoal);color:#fff;border:none;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--fa);transition:background .2s}
+.btn-charcoal:hover{background:#444}
+.hamburger{display:none;background:none;border:none;font-size:22px;cursor:pointer;color:var(--charcoal);padding:4px}
+.mobile-menu{display:none;padding:12px 24px 16px;border-top:1px solid var(--light-gray);background:var(--warm-white)}
+.mobile-menu.open{display:block}
+.mobile-link{display:block;width:100%;text-align:left;padding:10px 0;background:none;border:none;cursor:pointer;font-size:15px;color:var(--charcoal);font-family:var(--fb)}
+.mobile-link.active{font-weight:600;color:var(--rose)}
+
+/* Content area */
+.content{min-height:70vh}
+.page{max-width:1100px;margin:0 auto;padding:0 24px}
+.page-narrow{max-width:720px;margin:0 auto;padding:48px 24px 80px}
+.hidden{display:none}
+
+/* Hero */
+.hero{margin:24px 0;padding:36px 40px;border-radius:20px;background:linear-gradient(135deg,#FFF5F5 0%,#FFF8F2 40%,#F5F8F2 70%,#F8F5FA 100%);border:1px solid var(--rose-light);position:relative;overflow:hidden}
+.hero-watermark{position:absolute;top:-30px;right:-20px;opacity:.05}
+.hero h1{font-family:var(--fd);font-size:30px;font-weight:700;line-height:1.3;margin-bottom:10px;max-width:500px;position:relative}
+.hero h1 em{font-style:italic;color:var(--rose)}
+.hero p{font-size:15px;color:var(--warm-gray);line-height:1.6;max-width:440px;position:relative}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:0 0 24px}
+.stat{padding:16px 20px;background:var(--warm-white);border-radius:14px;border:1px solid var(--light-gray);display:flex;align-items:center;gap:12px}
+.stat-icon{font-size:24px}
+.stat-val{font-size:20px;font-weight:700;font-family:var(--fa)}
+.stat-label{font-size:11px;color:var(--warm-gray);letter-spacing:.3px}
+
+/* Search */
+.search-wrap{position:relative;margin-bottom:16px}
+.search-wrap input{width:100%;padding:12px 16px 12px 42px;border:1.5px solid var(--light-gray);border-radius:14px;font-size:14px;font-family:var(--fb);background:var(--warm-white)}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--warm-gray)}
+
+/* Category pills */
+.cats{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
+.cat-pill{padding:8px 16px;border-radius:24px;cursor:pointer;font-size:13px;font-weight:600;font-family:var(--fa);white-space:nowrap;transition:all .2s;border:1px solid var(--light-gray);background:var(--warm-white);color:var(--charcoal)}
+.cat-pill.active{color:#fff;border-color:transparent}
+
+/* Sort bar */
+.sort-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--light-gray)}
+.sort-btns{display:flex;gap:4px}
+.sort-btn{padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:400;background:transparent;color:var(--warm-gray);font-family:var(--fa);transition:all .2s}
+.sort-btn.active{font-weight:600;background:var(--charcoal);color:#fff}
+.sort-count{font-size:13px;color:var(--warm-gray)}
+
+/* Badge */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.5px;font-family:var(--fa);text-transform:uppercase}
+
+/* Deal card */
+.deal-feed{display:flex;flex-direction:column;gap:10px;padding-bottom:60px}
+.deal-card{display:flex;gap:16px;padding:20px 24px;background:var(--warm-white);border-radius:16px;border:1px solid var(--light-gray);box-shadow:0 1px 4px rgba(0,0,0,.02);transition:transform .2s,box-shadow .2s;cursor:pointer;position:relative}
+.deal-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.07)}
+.deal-card.hot{border:1.5px solid var(--rose-light);box-shadow:0 4px 20px rgba(196,97,106,.06)}
+.deal-card.hot:hover{box-shadow:0 8px 30px rgba(0,0,0,.07)}
+.hot-tag{position:absolute;top:-1px;right:20px;background:linear-gradient(135deg,var(--rose),#D4616A);color:#fff;padding:4px 14px;border-radius:0 0 8px 8px;font-size:10px;font-weight:700;letter-spacing:1px;font-family:var(--fa);text-transform:uppercase}
+.deal-body{flex:1;min-width:0}
+.deal-badges{display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.deal-title{font-family:var(--fd);font-size:17px;font-weight:600;line-height:1.35;margin-bottom:6px}
+.deal-desc{font-size:13.5px;line-height:1.5;color:var(--warm-gray);margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.deal-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.deal-price{font-size:20px;font-weight:700;color:var(--rose-dark);font-family:var(--fa)}
+.deal-orig{font-size:13px;color:var(--warm-gray);text-decoration:line-through}
+.deal-disc{font-size:12px;font-weight:700;color:var(--sage);font-family:var(--fa);background:var(--sage-light);padding:2px 8px;border-radius:6px}
+.deal-info{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--warm-gray)}
+
+/* Vote button */
+.vote-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 14px;border:2px solid var(--light-gray);border-radius:12px;background:var(--warm-white);cursor:pointer;transition:all .2s;flex-shrink:0}
+.vote-btn.voted{border-color:var(--rose);background:var(--rose-light)}
+.vote-btn .arrow{font-size:18px;line-height:1;color:var(--warm-gray)}
+.vote-btn.voted .arrow{color:var(--rose)}
+.vote-btn .count{font-size:14px;font-weight:700;color:var(--charcoal);font-family:var(--fa)}
+.vote-btn.voted .count{color:var(--rose-dark)}
+.vote-pulse{animation:pu .4s ease}
+
+/* Modal overlay */
+.modal-overlay{position:fixed;inset:0;z-index:1000;display:flex;justify-content:center;align-items:flex-start;background:rgba(45,42,38,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);overflow-y:auto;padding:40px 16px}
+.modal-box{background:var(--warm-white);border-radius:20px;max-width:680px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.15);position:relative;overflow:hidden}
+.modal-box.narrow{max-width:560px}
+.modal-bar{height:5px}
+.modal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border:none;border-radius:50%;background:var(--light-gray);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:var(--charcoal);z-index:2}
+.modal-content{padding:28px}
+
+/* Deal modal specifics */
+.deal-modal-title{font-family:var(--fd);font-size:24px;font-weight:700;line-height:1.3;margin-bottom:12px}
+.deal-modal-desc{font-size:15px;line-height:1.65;color:var(--warm-gray);margin-bottom:20px}
+.price-box{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding:20px;background:linear-gradient(135deg,var(--cream),rgba(242,212,214,.2));border-radius:14px;border:1px solid var(--rose-light)}
+.price-big{font-size:30px;font-weight:700;color:var(--rose-dark);font-family:var(--fa)}
+.price-orig{font-size:15px;color:var(--warm-gray);text-decoration:line-through}
+.price-save{font-size:14px;font-weight:700;color:var(--sage);font-family:var(--fa);background:var(--sage-light);padding:3px 10px;border-radius:8px}
+.btn-deal{width:100%;padding:14px 24px;background:var(--rose);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--fa);letter-spacing:.5px;margin-bottom:28px;box-shadow:0 4px 14px rgba(196,97,106,.25);transition:background .2s}
+.btn-deal:hover{background:var(--rose-dark)}
+
+/* Comments */
+.comments-header{font-family:var(--fa);font-size:14px;font-weight:600;margin-bottom:16px;letter-spacing:.5px;text-transform:uppercase;color:var(--warm-gray);border-top:1px solid var(--light-gray);padding-top:20px}
+.comment{padding:14px 0;border-bottom:1px solid var(--light-gray)}
+.comment-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.comment-user{display:flex;align-items:center;gap:8px}
+.comment-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--rose-light),var(--honey-light));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--rose-dark)}
+.comment-name{font-weight:600;font-size:13px}
+.comment-time{font-size:11px;color:var(--warm-gray)}
+.comment-like{background:none;border:none;cursor:pointer;font-size:12px;color:var(--warm-gray)}
+.comment-text{font-size:14px;line-height:1.55;margin-left:36px}
+.comment-add{display:flex;gap:10px;margin-top:16px}
+.comment-input{flex:1;padding:12px 16px;border:1.5px solid var(--light-gray);border-radius:12px;font-size:14px;font-family:var(--fb);background:var(--cream)}
+
+/* Form fields */
+.field-label{font-size:12px;font-weight:600;color:var(--warm-gray);letter-spacing:.5px;margin-bottom:6px;display:block;font-family:var(--fa);text-transform:uppercase}
+.field-input{width:100%;padding:12px 16px;border:1.5px solid var(--light-gray);border-radius:12px;font-size:14px;font-family:var(--fb);background:var(--cream);margin-bottom:14px}
+.field-textarea{width:100%;padding:12px 16px;border:1.5px solid var(--light-gray);border-radius:12px;font-size:14px;font-family:var(--fb);background:var(--cream);margin-bottom:14px;min-height:80px;resize:vertical}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* About page */
+.about-text{font-size:17px;line-height:1.85;margin-bottom:24px}
+.about-highlight{padding:28px 32px;background:linear-gradient(135deg,#FFF5F5,#FFF8F2,#F8F5FA);border-radius:16px;border:1px solid var(--rose-light);margin:36px 0}
+.about-cta{font-size:20px;color:var(--rose);font-family:var(--fd);font-weight:600;text-align:center;margin-top:40px}
+
+/* How it works */
+.step{display:flex;gap:24px;margin-bottom:40px;align-items:flex-start}
+.step-icon{width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.step-label{font-family:var(--fa);font-size:12px;font-weight:700;letter-spacing:1px}
+.step-title{font-family:var(--fd);font-size:22px;font-weight:600;margin:4px 0 8px}
+.step-desc{font-size:15px;line-height:1.7;color:var(--warm-gray)}
+.step-cta{text-align:center;padding:36px 32px;background:linear-gradient(135deg,rgba(242,212,214,.25),rgba(245,230,196,.25));border-radius:20px;border:1px solid var(--rose-light);margin-top:20px}
+
+/* Guidelines */
+.rule{padding:24px 28px;background:var(--warm-white);border-radius:16px;border:1px solid var(--light-gray);margin-bottom:12px}
+.rule-header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.rule-icon{font-size:20px}
+.rule-title{font-family:var(--fd);font-size:18px;font-weight:600}
+.rule-text{font-size:14.5px;line-height:1.7;color:var(--warm-gray);padding-left:32px}
+.escalation{display:flex;gap:12px;margin-bottom:12px;align-items:flex-start}
+.esc-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;font-family:var(--fa);flex-shrink:0}
+
+/* Empty state */
+.empty{text-align:center;padding:60px 20px}
+.empty h3{font-family:var(--fd);font-size:20px;margin-top:16px;margin-bottom:8px}
+.empty p{color:var(--warm-gray);font-size:14px}
+
+/* Page header */
+.page-header{text-align:center;margin-bottom:48px}
+.page-header h1{font-family:var(--fd);font-size:40px;font-weight:700;line-height:1.2;margin-bottom:12px}
+.page-header p{font-size:16px;color:var(--warm-gray);line-height:1.6;max-width:500px;margin:0 auto}
+.page-divider{width:60px;height:3px;background:linear-gradient(90deg,var(--rose),var(--honey));border-radius:2px;margin:20px auto 0}
+
+/* Footer */
+.footer{background:var(--charcoal);color:rgba(255,255,255,.6);padding:48px 24px 32px}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:40px;justify-content:space-between}
+.footer-col{min-width:120px}
+.footer-col.wide{min-width:200px}
+.footer-col.email{min-width:180px}
+.footer-heading{font-family:var(--fa);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:16px}
+.footer-link{font-size:13px;margin-bottom:10px;cursor:pointer;transition:color .2s}
+.footer-link:hover{color:#fff}
+.footer-text{font-size:13px;line-height:1.7;max-width:280px}
+.footer-email-wrap{display:flex;gap:8px}
+.footer-email{flex:1;padding:10px 14px;border:1px solid rgba(255,255,255,.2);border-radius:8px;font-size:13px;background:rgba(255,255,255,.08);color:#fff;font-family:var(--fb)}
+.footer-email::placeholder{color:rgba(255,255,255,.4)}
+.footer-email-btn{padding:10px 16px;background:var(--rose);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--fa)}
+.footer-social{display:flex;gap:16px;margin-top:16px}
+.footer-social span{font-size:12px;cursor:pointer;transition:color .2s}
+.footer-social span:hover{color:#fff}
+.footer-bottom{max-width:1100px;margin:32px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);text-align:center;font-size:12px;color:rgba(255,255,255,.3)}
+.footer-logo{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.footer-logo span{font-family:var(--fd);font-size:20px;font-weight:700;color:#fff}
+
+/* Responsive */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:block}
+  .btn-rose.desktop{display:none}
+  .hero{padding:28px 24px}
+  .hero h1{font-size:24px}
+  .page-header h1{font-size:30px}
+  .deal-card{padding:16px}
+  .step{flex-direction:column;gap:12px}
+  .field-grid{grid-template-columns:1fr}
+  .footer-inner{flex-direction:column;gap:24px}
+  .price-box{flex-direction:column;gap:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="go('home')">
+      <svg width="30" height="30" viewBox="0 0 100 100" fill="none"><ellipse cx="50" cy="35" rx="14" ry="24" fill="#C4616A" opacity=".85"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#8B9E7E" opacity=".75" transform="rotate(72 50 50)"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#D4A853" opacity=".75" transform="rotate(144 50 50)"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#C4826A" opacity=".75" transform="rotate(216 50 50)"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#6B4C6E" opacity=".75" transform="rotate(288 50 50)"/><circle cx="50" cy="50" r="8" fill="#FAF7F4"/><circle cx="50" cy="50" r="5" fill="#D4A853" opacity=".9"/></svg>
+      <span>DealPetal</span>
+    </div>
+    <div class="nav-links" id="navLinks">
+      <button class="nav-link active" onclick="go('home')" data-page="home">Deals</button>
+      <button class="nav-link" onclick="go('about')" data-page="about">About</button>
+      <button class="nav-link" onclick="go('how')" data-page="how">How It Works</button>
+      <button class="nav-link" onclick="go('guidelines')" data-page="guidelines">Guidelines</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="btn-rose desktop" onclick="openSubmit()">+ Share Deal</button>
+      <button class="hamburger" id="hamburgerBtn" onclick="toggleMobile()">☰</button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-link active" onclick="go('home');closeMobile()" data-page="home">Deals</button>
+    <button class="mobile-link" onclick="go('about');closeMobile()" data-page="about">About</button>
+    <button class="mobile-link" onclick="go('how');closeMobile()" data-page="how">How It Works</button>
+    <button class="mobile-link" onclick="go('guidelines');closeMobile()" data-page="guidelines">Guidelines</button>
+    <button class="btn-rose" style="margin-top:8px;width:100%" onclick="openSubmit();closeMobile()">+ Share Deal</button>
+  </div>
+</nav>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- HOME PAGE -->
+<div id="page-home" class="page">
+  <div class="hero fu">
+    <div class="hero-watermark"><svg width="200" height="200" viewBox="0 0 100 100" fill="none"><ellipse cx="50" cy="35" rx="14" ry="24" fill="#C4616A" opacity=".85"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#8B9E7E" opacity=".75" transform="rotate(72 50 50)"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#D4A853" opacity=".75" transform="rotate(144 50 50)"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#C4826A" opacity=".75" transform="rotate(216 50 50)"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#6B4C6E" opacity=".75" transform="rotate(288 50 50)"/></svg></div>
+    <h1>The deals you actually <em>care</em> about.</h1>
+    <p>Community-curated deals on beauty, fashion, wellness, home & kids. Discover, vote, and save together.</p>
+  </div>
+  <div class="stats" id="statsRow"></div>
+  <div class="search-wrap">
+    <input id="searchInput" placeholder="Search deals, stores, brands..." oninput="filterDeals()">
+    <span class="search-icon">🔍</span>
+  </div>
+  <div class="cats" id="catPills"></div>
+  <div class="sort-bar">
+    <div class="sort-btns" id="sortBtns"></div>
+    <span class="sort-count" id="sortCount"></span>
+  </div>
+  <div class="deal-feed" id="dealFeed"></div>
+</div>
+
+<!-- ABOUT PAGE -->
+<div id="page-about" class="page-narrow hidden">
+  <div class="fu" style="text-align:center;margin-bottom:32px">
+    <svg width="64" height="64" viewBox="0 0 100 100" fill="none"><ellipse cx="50" cy="35" rx="14" ry="24" fill="#C4616A" opacity=".85"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#8B9E7E" opacity=".75" transform="rotate(72 50 50)"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#D4A853" opacity=".75" transform="rotate(144 50 50)"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#C4826A" opacity=".75" transform="rotate(216 50 50)"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#6B4C6E" opacity=".75" transform="rotate(288 50 50)"/><circle cx="50" cy="50" r="8" fill="#FAF7F4"/><circle cx="50" cy="50" r="5" fill="#D4A853" opacity=".9"/></svg>
+    <h1 style="font-family:var(--fd);font-size:40px;font-weight:700;margin:16px 0">Our Story</h1>
+    <div class="page-divider"></div>
+  </div>
+  <div class="fu" style="animation-delay:.1s">
+    <p class="about-text">DealPetal started at the kitchen table.</p>
+    <p class="about-text">My wife is one of the smartest shoppers I know — she can spot a great deal from a mile away. But every time she tried using the big deal-sharing sites, she'd come away frustrated. They were cluttered, overwhelming, and clearly not built with her in mind. Endless pages of tech gadgets and gaming gear, while the deals she actually cared about — a great price on skincare, a flash sale at Lululemon, the perfect home find at Target — were buried or missing entirely.</p>
+    <p class="about-text">One night she looked at me and said, <em style="font-family:var(--fd);font-style:italic">"Why isn't there a deal site that actually gets what I want to buy?"</em></p>
+    <p class="about-text">That question stuck with me. So I built one.</p>
+    <div class="about-highlight">
+      <p style="font-size:17px;line-height:1.85">DealPetal is a community-powered deals platform focused on the categories that matter most to you: <strong>Beauty & Skincare</strong>, <strong>Fashion & Clothing</strong>, <strong>Health & Wellness</strong>, <strong>Home & Kitchen</strong>, and <strong>Kids & Family</strong>. Every deal is submitted, voted on, and verified by our community — so you only see what's actually worth your time and money.</p>
+    </div>
+    <p class="about-text">No clutter. No noise. Just the deals you care about, curated by people who get it.</p>
+    <p class="about-cta">Welcome to DealPetal. Let's save together. ❀</p>
+  </div>
+</div>
+
+<!-- HOW IT WORKS PAGE -->
+<div id="page-how" class="page-narrow hidden">
+  <div class="page-header fu">
+    <h1>How DealPetal Works</h1>
+    <p>Four simple steps to smarter shopping.</p>
+    <div class="page-divider"></div>
+  </div>
+  <div class="step fu" style="animation-delay:.1s">
+    <div class="step-icon" style="background:rgba(196,97,106,.08);border:2px solid rgba(196,97,106,.15)">🔍</div>
+    <div><span class="step-label" style="color:var(--rose)">STEP 1</span><h3 class="step-title">Discover Deals</h3><p class="step-desc">Browse daily deals across Beauty, Fashion, Health & Wellness, Home, and Kids & Family — all curated and verified by our community.</p></div>
+  </div>
+  <div class="step fu" style="animation-delay:.2s">
+    <div class="step-icon" style="background:rgba(107,76,110,.08);border:2px solid rgba(107,76,110,.15)">⬆</div>
+    <div><span class="step-label" style="color:var(--plum)">STEP 2</span><h3 class="step-title">Vote & Comment</h3><p class="step-desc">See a deal you love? Upvote it so others can find it. Tried the product? Leave a comment and help the community decide.</p></div>
+  </div>
+  <div class="step fu" style="animation-delay:.3s">
+    <div class="step-icon" style="background:rgba(139,158,126,.08);border:2px solid rgba(139,158,126,.15)">📤</div>
+    <div><span class="step-label" style="color:var(--sage)">STEP 3</span><h3 class="step-title">Share Deals</h3><p class="step-desc">Found an amazing deal out in the wild? Submit it to DealPetal. If the community loves it, it rises to the top.</p></div>
+  </div>
+  <div class="step fu" style="animation-delay:.4s">
+    <div class="step-icon" style="background:rgba(212,168,83,.08);border:2px solid rgba(212,168,83,.15)">💰</div>
+    <div><span class="step-label" style="color:var(--honey)">STEP 4</span><h3 class="step-title">Save Together</h3><p class="step-desc">The best deals are the ones we find together. Join thousands of savvy shoppers helping each other spend less on the things they love.</p></div>
+  </div>
+  <div class="step-cta fu" style="animation-delay:.5s">
+    <h3 style="font-family:var(--fd);font-size:22px;font-weight:600;margin-bottom:8px">Ready to start saving?</h3>
+    <p style="font-size:15px;color:var(--warm-gray);margin-bottom:16px">Join the community and discover deals you'll actually love.</p>
+    <button class="btn-rose" style="padding:12px 28px;font-size:15px;border-radius:12px;box-shadow:0 4px 14px rgba(196,97,106,.25)" onclick="go('home')">Browse Today's Deals ❀</button>
+  </div>
+</div>
+
+<!-- GUIDELINES PAGE -->
+<div id="page-guidelines" class="page-narrow hidden">
+  <div class="page-header fu">
+    <h1>Community Guidelines</h1>
+    <p>Our community is what makes DealPetal special. These guidelines keep it welcoming, helpful, and trustworthy.</p>
+    <div class="page-divider"></div>
+  </div>
+  <div id="rulesContainer"></div>
+  <div class="rule fu" style="animation-delay:.5s;margin-top:20px">
+    <h3 style="font-family:var(--fd);font-size:18px;font-weight:600;margin-bottom:16px">What Happens If Guidelines Are Broken</h3>
+    <div class="escalation"><div class="esc-num" style="background:rgba(212,168,83,.15);color:var(--honey)">1</div><p style="font-size:14px"><strong>First offense:</strong> <span style="color:var(--warm-gray)">Post or comment removed with a friendly reminder</span></p></div>
+    <div class="escalation"><div class="esc-num" style="background:rgba(196,130,106,.15);color:var(--terra)">2</div><p style="font-size:14px"><strong>Repeat offenses:</strong> <span style="color:var(--warm-gray)">Temporary account suspension</span></p></div>
+    <div class="escalation"><div class="esc-num" style="background:rgba(196,97,106,.15);color:var(--rose)">3</div><p style="font-size:14px"><strong>Severe violations:</strong> <span style="color:var(--warm-gray)">Permanent ban</span></p></div>
+  </div>
+  <p class="fu" style="animation-delay:.6s;text-align:center;font-size:16px;color:var(--rose);font-family:var(--fd);font-weight:500;margin-top:40px;font-style:italic">We want DealPetal to be the most welcoming deals community on the internet. Thanks for helping us make that happen. ❀</p>
+</div>
+
+</div><!-- end content -->
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-col wide">
+      <div class="footer-logo">
+        <svg width="24" height="24" viewBox="0 0 100 100" fill="none"><ellipse cx="50" cy="35" rx="14" ry="24" fill="#C4616A" opacity=".85"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#8B9E7E" opacity=".75" transform="rotate(72 50 50)"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#D4A853" opacity=".75" transform="rotate(144 50 50)"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#C4826A" opacity=".75" transform="rotate(216 50 50)"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#6B4C6E" opacity=".75" transform="rotate(288 50 50)"/><circle cx="50" cy="50" r="8" fill="#FAF7F4"/><circle cx="50" cy="50" r="5" fill="#D4A853" opacity=".9"/></svg>
+        <span>DealPetal</span>
+      </div>
+      <p class="footer-text">The deal site that actually gets what you want to buy. Community-powered savings on beauty, fashion, wellness, home & kids.</p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-heading">Browse</div>
+      <div class="footer-link">✿ Beauty & Skincare</div>
+      <div class="footer-link">♡ Fashion & Clothing</div>
+      <div class="footer-link">❋ Health & Wellness</div>
+      <div class="footer-link">◈ Home & Kitchen</div>
+      <div class="footer-link">★ Kids & Family</div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-heading">Company</div>
+      <div class="footer-link" onclick="go('about')">About</div>
+      <div class="footer-link" onclick="go('how')">How It Works</div>
+      <div class="footer-link" onclick="go('guidelines')">Guidelines</div>
+    </div>
+    <div class="footer-col email">
+      <div class="footer-heading">Stay in the loop</div>
+      <p style="font-size:13px;margin-bottom:12px">Get the best deals in your inbox.</p>
+      <div id="footerEmailWrap">
+        <div class="footer-email-wrap">
+          <input class="footer-email" id="footerEmail" placeholder="Your email">
+          <button class="footer-email-btn" onclick="joinEmail()">Join</button>
+        </div>
+      </div>
+      <div class="footer-social">
+        <span>Instagram</span><span>TikTok</span><span>Pinterest</span><span>X</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 DealPetal. All rights reserved.</div>
+</footer>
+
+<!-- DEAL DETAIL MODAL -->
+<div class="modal-overlay hidden" id="dealModal" onclick="if(event.target===this)closeDealModal()">
+  <div class="modal-box si" id="dealModalBox">
+    <div class="modal-bar" id="dealModalBar"></div>
+    <button class="modal-close" onclick="closeDealModal()">×</button>
+    <div class="modal-content" id="dealModalContent"></div>
+  </div>
+</div>
+
+<!-- SUBMIT DEAL MODAL -->
+<div class="modal-overlay hidden" id="submitModal" onclick="if(event.target===this)closeSubmit()">
+  <div class="modal-box narrow si">
+    <div class="modal-bar" style="background:linear-gradient(90deg,var(--rose),var(--honey),var(--sage))"></div>
+    <button class="modal-close" onclick="closeSubmit()">×</button>
+    <div class="modal-content">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+        <h2 style="font-family:var(--fd);font-size:22px;font-weight:700">Share a Deal</h2>
+      </div>
+      <label class="field-label">Deal Title *</label>
+      <input class="field-input" id="sf-title" placeholder="e.g., 50% off Fenty Beauty at Sephora">
+      <label class="field-label">Description</label>
+      <textarea class="field-textarea" id="sf-desc" placeholder="What makes this deal great?"></textarea>
+      <div class="field-grid">
+        <div><label class="field-label">Category</label><select class="field-input" id="sf-cat"><option value="beauty">✿ Beauty & Skincare</option><option value="fashion">♡ Fashion & Clothing</option><option value="health">❋ Health & Wellness</option><option value="home">◈ Home & Kitchen</option><option value="kids">★ Kids & Family</option></select></div>
+        <div><label class="field-label">Store</label><input class="field-input" id="sf-store" placeholder="e.g., Target"></div>
+      </div>
+      <div class="field-grid">
+        <div><label class="field-label">Sale Price *</label><input class="field-input" id="sf-price" placeholder="$29.99"></div>
+        <div><label class="field-label">Original Price</label><input class="field-input" id="sf-orig" placeholder="$59.99"></div>
+      </div>
+      <label class="field-label">Deal URL</label>
+      <input class="field-input" id="sf-url" placeholder="https://...">
+      <button class="btn-deal" onclick="submitDeal()">Share Deal with Community ❀</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Data ─────────────────────────────────────────────────────────
+const CATS = [
+  {id:"all",name:"All Deals",icon:"✦",color:"#C4616A"},
+  {id:"beauty",name:"Beauty & Skincare",icon:"✿",color:"#C4616A"},
+  {id:"fashion",name:"Fashion & Clothing",icon:"♡",color:"#6B4C6E"},
+  {id:"health",name:"Health & Wellness",icon:"❋",color:"#8B9E7E"},
+  {id:"home",name:"Home & Kitchen",icon:"◈",color:"#C4826A"},
+  {id:"kids",name:"Kids & Family",icon:"★",color:"#D4A853"},
+];
+
+let deals = [
+  {id:1,title:"Dyson Airwrap Complete — 40% Off at Sephora",desc:"The holy grail styling tool at its lowest price ever. Includes all attachments. Limited stock — multiple color options available including ceramic pink and prussian blue.",cat:"beauty",store:"Sephora",price:"$359.99",orig:"$599.99",disc:"40%",votes:342,comments:[{user:"GlowQueen",text:"Just ordered! Been waiting for this price since Black Friday 🎉",time:"2h ago",likes:24},{user:"SavvyShopper",text:"Confirmed working — grabbed one for my sister too!",time:"1h ago",likes:18},{user:"CurlsAndSaves",text:"This is the coanda smoothing dryer I've been waiting for!",time:"45m ago",likes:9}],by:"DealHunterMia",time:"3h ago",verified:true,hot:true,voted:false},
+  {id:2,title:"Lululemon Align Leggings — WMTM Drop $49",desc:"Multiple colors just hit We Made Too Much. Sizes going fast in popular shades. Nulu fabric, 25\" length. Perfect for yoga, pilates, or everyday wear.",cat:"fashion",store:"Lululemon",price:"$49.00",orig:"$98.00",disc:"50%",votes:278,comments:[{user:"FitnessFiona",text:"The rosemary green color is STUNNING in person",time:"4h ago",likes:31},{user:"YogaDaily",text:"Size up if between sizes. Just grabbed 3 pairs!",time:"2h ago",likes:14}],by:"AthleisureAddict",time:"5h ago",verified:true,hot:true,voted:false},
+  {id:3,title:"Vitamix Explorian Blender — $199 at Target",desc:"Restaurant-grade blender at entry-level price. Perfect for smoothies, soups, nut butters. Stack with Target Circle for extra 5% off.",cat:"home",store:"Target",price:"$199.99",orig:"$349.99",disc:"43%",votes:195,comments:[{user:"SmoothieQueen",text:"Had mine 3 years, still works like new. Worth every penny at this price.",time:"5h ago",likes:22}],by:"HomeChefSara",time:"6h ago",verified:true,hot:false,voted:false},
+  {id:4,title:"AG1 Athletic Greens — Free Vitamin D + Travel Packs",desc:"Best bundle deal of the year. Subscribe and get free vitamin D3+K2 for a full year plus 5 travel packs. Cancel anytime.",cat:"health",store:"AG1",price:"$79/mo",orig:"$99/mo",disc:"20%+",votes:156,comments:[{user:"WellnessWen",text:"6 months in and I love it. Travel packs perfect for gym bag.",time:"1h ago",likes:12}],by:"HealthyHabit",time:"8h ago",verified:false,hot:false,voted:false},
+  {id:5,title:"Lovevery Play Kits — 15% Off First 4 Kits",desc:"Montessori-inspired developmental toys delivered quarterly. Highest discount they've offered. Ages newborn through 4 years.",cat:"kids",store:"Lovevery",price:"$68/kit",orig:"$80/kit",disc:"15%",votes:134,comments:[{user:"NewMom2025",text:"My 8-month-old is obsessed with the peek-a-boo box!",time:"3h ago",likes:17}],by:"MamaBearDeals",time:"10h ago",verified:true,hot:false,voted:false},
+  {id:6,title:"Charlotte Tilbury Hollywood Flawless Filter — $30",desc:"TikTok-famous complexion booster at 33% off. Works as primer, highlighter, or mixed into foundation. Shade range 1-7 at Nordstrom.",cat:"beauty",store:"Nordstrom",price:"$30.00",orig:"$46.00",disc:"33%",votes:223,comments:[{user:"MakeupMaven",text:"Shade 3 is the universal glow shade — trust me",time:"30m ago",likes:45},{user:"GlowGetter",text:"I mix this with moisturizer for the most natural glow ever",time:"15m ago",likes:28}],by:"BeautyBargains",time:"2h ago",verified:true,hot:true,voted:false},
+  {id:7,title:"Free People Hot Shot Mini Shorts — $29.95",desc:"Viral shorts at almost half price. High-rise, built-in brief, buttery soft fabric. Great for workouts or casual wear.",cat:"fashion",store:"Free People",price:"$29.95",orig:"$48.00",disc:"38%",votes:189,comments:[],by:"StyleSavvy",time:"4h ago",verified:true,hot:false,voted:false},
+  {id:8,title:"Our Place Always Pan 2.0 — $99 (New Colors!)",desc:"Iconic 8-in-1 pan in new seasonal colors. Nonstick, toxin-free coating. Replaces fry pan, saucepan, steamer, and more.",cat:"home",store:"Our Place",price:"$99.00",orig:"$150.00",disc:"34%",votes:167,comments:[{user:"KitchenQueen",text:"The lavender color is gorgeous and cooks perfectly!",time:"3h ago",likes:19}],by:"HomeChefSara",time:"7h ago",verified:true,hot:false,voted:false},
+  {id:9,title:"Olaplex No. 3 Hair Perfector — BOGO 50% Off",desc:"The bond-building treatment that saved everyone's hair. Buy one get second 50% off at Ulta. Stock up price.",cat:"beauty",store:"Ulta",price:"$22.00",orig:"$30.00",disc:"27%",votes:201,comments:[{user:"HairCareJunkie",text:"Leave it on 30+ min for best results. Game changer for colored hair!",time:"1h ago",likes:33}],by:"BeautyBargains",time:"1h ago",verified:true,hot:true,voted:false},
+  {id:10,title:"Hatch Rest+ Sound Machine — $49.99 at Amazon",desc:"#1 rated baby sound machine and nightlight combo. App-controlled, grows with your child. Lowest price in 6 months.",cat:"kids",store:"Amazon",price:"$49.99",orig:"$69.99",disc:"29%",votes:98,comments:[],by:"ParentHacks",time:"5h ago",verified:true,hot:false,voted:false},
+];
+
+let activeCat = "all";
+let activeSort = "hot";
+let currentPage = "home";
+
+// ── Navigation ───────────────────────────────────────────────────
+function go(page) {
+  currentPage = page;
+  document.querySelectorAll('[id^="page-"]').forEach(p => p.classList.add('hidden'));
+  document.getElementById('page-' + page).classList.remove('hidden');
+  // Update nav links
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.dataset.page === page));
+  document.querySelectorAll('.mobile-link').forEach(l => l.classList.toggle('active', l.dataset.page === page));
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  // Re-trigger animations
+  document.getElementById('page-' + page).querySelectorAll('.fu,.si').forEach(el => {
+    el.style.animation = 'none'; el.offsetHeight; el.style.animation = '';
+  });
+}
+
+function toggleMobile() {
+  const m = document.getElementById('mobileMenu');
+  const b = document.getElementById('hamburgerBtn');
+  m.classList.toggle('open');
+  b.textContent = m.classList.contains('open') ? '✕' : '☰';
+}
+function closeMobile() {
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hamburgerBtn').textContent = '☰';
+}
+
+// ── Render Functions ─────────────────────────────────────────────
+function badge(text, color, bg) {
+  return `<span class="badge" style="color:${color};background:${bg || color+'18'}">${text}</span>`;
+}
+
+function renderStats() {
+  const hot = deals.filter(d => d.hot).length;
+  document.getElementById('statsRow').innerHTML = [
+    {l:"Hot Deals Today",v:hot,i:"🔥",a:"var(--rose)"},
+    {l:"Community Members",v:"12.4K",i:"👥",a:"var(--plum)"},
+    {l:"Saved This Week",v:"$2,847",i:"💰",a:"var(--sage)"},
+  ].map((s,i) => `<div class="stat fu" style="animation-delay:${i*.08}s"><span class="stat-icon">${s.i}</span><div><div class="stat-val" style="color:${s.a}">${s.v}</div><div class="stat-label">${s.l}</div></div></div>`).join('');
+}
+
+function renderCats() {
+  document.getElementById('catPills').innerHTML = CATS.map(c => {
+    const active = activeCat === c.id;
+    const style = active ? `background:linear-gradient(135deg,${c.color},${c.color}CC);color:#fff;border-color:transparent;box-shadow:0 2px 10px ${c.color}30` : '';
+    return `<button class="cat-pill ${active?'active':''}" style="${style}" onclick="setCat('${c.id}')">${c.icon} ${c.name}</button>`;
+  }).join('');
+}
+
+function renderSorts() {
+  document.getElementById('sortBtns').innerHTML = [
+    {id:"hot",l:"🔥 Hot"},{id:"new",l:"✨ New"},{id:"top",l:"⬆ Top Voted"}
+  ].map(s => `<button class="sort-btn ${activeSort===s.id?'active':''}" onclick="setSort('${s.id}')">${s.l}</button>`).join('');
+}
+
+function getFiltered() {
+  const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
+  let fd = deals.filter(d => activeCat === 'all' || d.cat === activeCat);
+  if (q) fd = fd.filter(d => d.title.toLowerCase().includes(q) || d.store.toLowerCase().includes(q) || d.desc.toLowerCase().includes(q));
+  fd.sort((a,b) => {
+    if (activeSort === 'hot') return (b.hot?1:0) - (a.hot?1:0) || b.votes - a.votes;
+    if (activeSort === 'new') return b.id - a.id;
+    return b.votes - a.votes;
+  });
+  return fd;
+}
+
+function renderDeals() {
+  const fd = getFiltered();
+  document.getElementById('sortCount').textContent = fd.length + ' deal' + (fd.length !== 1 ? 's' : '');
+  if (fd.length === 0) {
+    document.getElementById('dealFeed').innerHTML = `<div class="empty"><svg width="64" height="64" viewBox="0 0 100 100" fill="none"><ellipse cx="50" cy="35" rx="14" ry="24" fill="#C4616A" opacity=".85"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#8B9E7E" opacity=".75" transform="rotate(72 50 50)"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#D4A853" opacity=".75" transform="rotate(144 50 50)"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#C4826A" opacity=".75" transform="rotate(216 50 50)"/><ellipse cx="50" cy="35" rx="14" ry="24" fill="#6B4C6E" opacity=".75" transform="rotate(288 50 50)"/><circle cx="50" cy="50" r="8" fill="#FAF7F4"/><circle cx="50" cy="50" r="5" fill="#D4A853" opacity=".9"/></svg><h3>No deals found</h3><p>Try a different category or search term!</p></div>`;
+    return;
+  }
+  document.getElementById('dealFeed').innerHTML = fd.map((d, i) => {
+    const cat = CATS.find(c => c.id === d.cat);
+    return `<div class="deal-card ${d.hot?'hot':''} fu" style="animation-delay:${i*.05}s" onclick="openDeal(${d.id})">
+      ${d.hot ? '<div class="hot-tag">🔥 HOT</div>' : ''}
+      <button class="vote-btn ${d.voted?'voted':''}" onclick="event.stopPropagation();vote(${d.id})">
+        <span class="arrow">▲</span><span class="count">${d.votes}</span>
+      </button>
+      <div class="deal-body">
+        <div class="deal-badges">
+          ${badge(cat.icon+' '+cat.name, cat.color)}
+          ${badge(d.store, '#8A8580', '#E8E4E0')}
+          ${d.verified ? badge('✓ Verified', '#8B9E7E', '#D4DFD0') : ''}
+        </div>
+        <h3 class="deal-title">${d.title}</h3>
+        <p class="deal-desc">${d.desc}</p>
+        <div class="deal-meta">
+          <div style="display:flex;align-items:baseline;gap:8px">
+            <span class="deal-price">${d.price}</span>
+            <span class="deal-orig">${d.orig}</span>
+            <span class="deal-disc">-${d.disc}</span>
+          </div>
+          <div class="deal-info"><span>💬 ${d.comments.length}</span><span>by ${d.by}</span><span>${d.time}</span></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderRules() {
+  const rules = [
+    {t:"Be Helpful",i:"💡",d:"Share deals you'd genuinely recommend. Include all the details — price, store, any coupon codes, and whether stock is limited. The more info, the better."},
+    {t:"Be Honest",i:"✓",d:"Only submit deals you've verified. If a deal has expired or a coupon code doesn't work, flag it so others don't waste their time. Don't exaggerate discounts."},
+    {t:"Be Kind",i:"♡",d:"We're all here to save money together. Disagree respectfully. Don't attack, insult, or belittle other members. Everyone's preferences and budgets are different — and that's okay."},
+    {t:"No Self-Promotion or Spam",i:"🚫",d:"Don't post referral links disguised as deals. Don't spam the same deal across categories. Don't promote your own business without disclosure."},
+    {t:"Keep It On Topic",i:"🎯",d:"DealPetal is about deals and saving money. Keep comments relevant to the deal being discussed. Off-topic posts and personal disputes will be removed."},
+    {t:"Protect Your Privacy",i:"🔒",d:"Don't share personal information (yours or anyone else's) in comments or deal posts. This includes addresses, phone numbers, and financial details."},
+    {t:"Report, Don't Retaliate",i:"🚩",d:"See something that breaks these guidelines? Use the report button. Our moderators will handle it. Don't engage with trolls or spam — just flag and move on."},
+  ];
+  document.getElementById('rulesContainer').innerHTML = rules.map((r, i) =>
+    `<div class="rule fu" style="animation-delay:${i*.06}s"><div class="rule-header"><span class="rule-icon">${r.i}</span><h3 class="rule-title">${r.t}</h3></div><p class="rule-text">${r.d}</p></div>`
+  ).join('');
+}
+
+// ── Actions ──────────────────────────────────────────────────────
+function setCat(id) { activeCat = id; renderCats(); renderDeals(); }
+function setSort(id) { activeSort = id; renderSorts(); renderDeals(); }
+function filterDeals() { renderDeals(); }
+
+function vote(id) {
+  const d = deals.find(x => x.id === id);
+  if (!d) return;
+  if (d.voted) { d.votes--; d.voted = false; } else { d.votes++; d.voted = true; }
+  renderDeals(); renderStats();
+}
+
+function openDeal(id) {
+  const d = deals.find(x => x.id === id);
+  if (!d) return;
+  const cat = CATS.find(c => c.id === d.cat);
+  document.getElementById('dealModalBar').style.background = `linear-gradient(90deg,${cat.color},#D4A853)`;
+  document.getElementById('dealModalContent').innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+      ${badge(cat.icon+' '+cat.name, cat.color)}
+      ${badge(d.store, '#8A8580', '#E8E4E0')}
+      ${d.verified ? badge('✓ Verified', '#8B9E7E', '#D4DFD0') : ''}
+      ${d.hot ? badge('🔥 Hot Deal', '#C4616A', '#F2D4D6') : ''}
+    </div>
+    <h2 class="deal-modal-title">${d.title}</h2>
+    <p class="deal-modal-desc">${d.desc}</p>
+    <div class="price-box">
+      <div style="flex:1">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:4px">
+          <span class="price-big">${d.price}</span>
+          <span class="price-orig">${d.orig}</span>
+          <span class="price-save">Save ${d.disc}</span>
+        </div>
+        <div style="font-size:12px;color:var(--warm-gray)">Posted by ${d.by} · ${d.time}</div>
+      </div>
+      <button class="vote-btn ${d.voted?'voted':''}" onclick="vote(${d.id});openDeal(${d.id})">
+        <span class="arrow">▲</span><span class="count">${d.votes}</span>
+      </button>
+    </div>
+    <button class="btn-deal">Get This Deal →</button>
+    <div class="comments-header">Community Comments (${d.comments.length})</div>
+    ${d.comments.map(c => `
+      <div class="comment">
+        <div class="comment-top">
+          <div class="comment-user">
+            <div class="comment-avatar">${c.user[0]}</div>
+            <span class="comment-name">${c.user}</span>
+            <span class="comment-time">${c.time}</span>
+          </div>
+          <button class="comment-like">♡ ${c.likes}</button>
+        </div>
+        <p class="comment-text">${c.text}</p>
+      </div>
+    `).join('')}
+    <div class="comment-add">
+      <input class="comment-input" id="newComment" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')addComment(${d.id})">
+      <button class="btn-charcoal" onclick="addComment(${d.id})">Post</button>
+    </div>
+  `;
+  document.getElementById('dealModal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDealModal() {
+  document.getElementById('dealModal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+function addComment(dealId) {
+  const input = document.getElementById('newComment');
+  if (!input.value.trim()) return;
+  const d = deals.find(x => x.id === dealId);
+  d.comments.push({user:"You",text:input.value.trim(),time:"Just now",likes:0});
+  openDeal(dealId);
+  renderDeals();
+}
+
+function openSubmit() {
+  document.getElementById('submitModal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function closeSubmit() {
+  document.getElementById('submitModal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+function submitDeal() {
+  const t = document.getElementById('sf-title').value;
+  const p = document.getElementById('sf-price').value;
+  if (!t || !p) return;
+  const orig = document.getElementById('sf-orig').value;
+  let disc = '';
+  if (orig) {
+    const pn = parseFloat(p.replace(/[^0-9.]/g,''));
+    const on = parseFloat(orig.replace(/[^0-9.]/g,''));
+    if (pn && on) disc = Math.round((1 - pn/on) * 100) + '%';
+  }
+  deals.unshift({
+    id: Date.now(), title: t, desc: document.getElementById('sf-desc').value || '',
+    cat: document.getElementById('sf-cat').value, store: document.getElementById('sf-store').value || 'Unknown',
+    price: p, orig: orig || p, disc: disc, votes: 1, comments: [],
+    by: "You", time: "Just now", verified: false, hot: false, voted: true
+  });
+  // Clear form
+  ['sf-title','sf-desc','sf-store','sf-price','sf-orig','sf-url'].forEach(id => document.getElementById(id).value = '');
+  closeSubmit();
+  renderDeals(); renderStats();
+}
+
+function joinEmail() {
+  const v = document.getElementById('footerEmail').value;
+  if (v.includes('@')) {
+    document.getElementById('footerEmailWrap').innerHTML = '<p style="font-size:14px;color:#8B9E7E">✓ You\'re in! Check your inbox.</p>';
+  }
+}
+
+// ── Init ─────────────────────────────────────────────────────────
+renderStats();
+renderCats();
+renderSorts();
+renderDeals();
+renderRules();
+</script>
+</body>
+</html>
